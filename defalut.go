@@ -6,7 +6,7 @@ import (
 	"github.com/xuender/kit/oss"
 )
 
-func NewGin() *gin.Engine {
+func Default() *gin.Engine {
 	if oss.IsRelease() {
 		logs.SetLevel(logs.Info)
 		gin.SetMode(gin.ReleaseMode)
