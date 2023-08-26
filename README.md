@@ -4,6 +4,15 @@
 
 gin 相关工具.
 
+## TODO
+
+* [ ] log 改称slog
+* [ ] 缓存
+  * [ ] redis
+  * [ ] Cache
+* [ ] 代理
+  * [ ] node SSR
+
 ## License
 
 © ender, 2023~time.Now
