@@ -7,16 +7,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func JSONRecoveryHandler(ctx *gin.Context) {
+func RecoveryHandler(ctx *gin.Context) {
 	defer func() {
 		if err := recover(); err != nil {
 			switch data := err.(type) {
 			case string:
-				ctx.JSON(http.StatusInternalServerError, data)
+				ctx.String(http.StatusInternalServerError, data)
 			case error:
-				ctx.JSON(http.StatusInternalServerError, data.Error())
+				ctx.String(http.StatusInternalServerError, data.Error())
 			default:
-				ctx.JSON(http.StatusInternalServerError, fmt.Sprintf("%v", data))
+				ctx.String(http.StatusInternalServerError, fmt.Sprintf("%v", data))
 			}
 		}
 	}()
