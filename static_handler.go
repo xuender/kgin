@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
+	"github.com/xuender/kit/set"
 )
 
 // StaticHandler fs.
@@ -14,16 +15,35 @@ func StaticHandler(urlPrefix string, fsys fs.FS, dirs ...string) gin.HandlerFunc
 		fsys, _ = fs.Sub(fsys, filepath.Join(dirs...))
 	}
 
-	handler := http.FileServer(http.FS(fsys))
-	if urlPrefix != "" {
+	var (
+		handler = http.FileServer(http.FS(fsys))
+		length  = len(urlPrefix)
+		paths   = set.NewSet[string]()
+	)
+
+	if length > 0 {
 		handler = http.StripPrefix(urlPrefix, handler)
 	}
 
 	return func(c *gin.Context) {
-		path := c.Request.URL.Path[1:]
-		if _, err := fsys.Open(path); path == "" || err == nil {
+		if fsHas(c.Request.URL.Path[length:], paths, fsys) {
 			handler.ServeHTTP(c.Writer, c.Request)
 			c.Abort()
 		}
 	}
+}
+
+func fsHas(path string, paths set.Set[string], fsys fs.FS) bool {
+	if path == "" || paths.Has(path) {
+		return true
+	}
+
+	if file, err := fsys.Open(path); err == nil {
+		file.Close()
+		paths.Add(path)
+
+		return true
+	}
+
+	return false
 }
