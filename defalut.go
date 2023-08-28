@@ -1,18 +1,18 @@
 package kgin
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
-	"github.com/xuender/kit/logs"
 	"github.com/xuender/kit/oss"
 )
 
 func Default() *gin.Engine {
 	if oss.IsRelease() {
-		logs.SetLevel(logs.Info)
 		gin.DisableConsoleColor()
 		gin.SetMode(gin.ReleaseMode)
 	} else {
-		logs.SetLevel(logs.Debug)
+		log.SetFlags(log.Lshortfile | log.LstdFlags)
 		gin.SetMode(gin.DebugMode)
 	}
 

@@ -1,11 +1,12 @@
 package kgin
 
 import (
-	"fmt"
+	"context"
+	"log/slog"
+	"runtime"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/xuender/kit/logs"
 )
 
 const _calldepth = 4
@@ -20,12 +21,28 @@ func LogHandler(ctx *gin.Context) {
 		query = "?" + query
 	}
 
-	_ = logs.I.Output(_calldepth, fmt.Sprintf("[%d] %v %s (%s) %s%s",
+	var pcs [1]uintptr
+
+	runtime.Callers(_calldepth, pcs[:])
+
+	record := slog.NewRecord(time.Now(), slog.LevelInfo, "gin", pcs[0])
+	args := []any{
+		"status",
 		ctx.Writer.Status(),
+		"elapsed",
 		time.Since(start),
+		"ip",
 		ctx.ClientIP(),
+		"method",
 		ctx.Request.Method,
+		"path",
 		ctx.Request.URL.Path,
-		query,
-	))
+	}
+
+	if query != "" {
+		args = append(args, "query", query)
+	}
+
+	record.Add(args...)
+	_ = slog.Default().Handler().Handle(context.Background(), record)
 }

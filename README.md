@@ -6,7 +6,7 @@ gin 相关工具.
 
 ## TODO
 
-* [ ] log 改称slog
+* [x] log 改 slog
 * [ ] 缓存
   * [ ] redis
   * [ ] Cache
