@@ -9,6 +9,7 @@ import (
 func Default() *gin.Engine {
 	if oss.IsRelease() {
 		logs.SetLevel(logs.Info)
+		gin.DisableConsoleColor()
 		gin.SetMode(gin.ReleaseMode)
 	} else {
 		logs.SetLevel(logs.Debug)
