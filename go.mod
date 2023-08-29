@@ -5,6 +5,7 @@ go 1.21
 // replace github.com/xx/xx => ../xx
 
 require (
+	github.com/AgentCosmic/xvalid v1.1.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/xuender/kit v1.0.35
 )
@@ -36,5 +37,6 @@ require (
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
+	gopkg.in/guregu/null.v3 v3.5.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
