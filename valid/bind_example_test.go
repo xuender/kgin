@@ -10,7 +10,7 @@ import (
 
 type Model struct {
 	Name string
-	Age  int `json:"age"`
+	Age  int `json:"age,omitempty"`
 }
 
 func (p Model) ValidationPost() xvalid.Rules {

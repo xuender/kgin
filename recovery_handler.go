@@ -22,7 +22,7 @@ func deferRecover(ctx *gin.Context) {
 	}
 
 	if data, ok := err.(valid.BadRequestError); ok {
-		ctx.String(http.StatusBadRequest, data.Err())
+		ctx.String(http.StatusBadRequest, data.String())
 
 		return
 	}
