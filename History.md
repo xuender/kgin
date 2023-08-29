@@ -1,4 +1,10 @@
 
+1.0.7 / 2023-08-29
+==================
+
+* feat: BedRequestError
+* feat: add BedRequestError
+
 1.0.6 / 2023-08-29
 ==================
 
