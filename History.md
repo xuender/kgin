@@ -1,4 +1,12 @@
 
+1.0.6 / 2023-08-29
+==================
+
+* feat: valid
+* feat: valid
+* feat: DirHandler
+* refactor: recovery_handler
+
 1.0.5 / 2023-08-28
 ==================
 
