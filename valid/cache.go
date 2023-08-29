@@ -33,7 +33,7 @@ func (p *Cache) Get(src any, name string) int {
 	for num := 0; num < typ.NumField(); num++ {
 		field := typ.Field(num)
 		if field.Name == name ||
-			strings.Contains(string(field.Tag), name) {
+			strings.Contains(string(field.Tag), `"`+name) {
 			p.data[key] = num
 
 			return num

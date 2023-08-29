@@ -5,6 +5,7 @@ import (
 	"reflect"
 
 	"github.com/gin-gonic/gin"
+	"github.com/xuender/kit/set"
 )
 
 // Bind 数据绑定并校验.
@@ -57,13 +58,18 @@ func Value[T Valid](src, target T, method string) (T, error) {
 		targetVal = targetVal.Elem()
 	}
 
+	set := set.NewSet[int]()
+
 	for _, vali := range src.Validation(method).Validators() {
-		i := _cache.Get(src, vali.Name())
-		if i < 0 {
+		index := _cache.Get(src, vali.Name())
+		if index < 0 || set.Has(index) {
 			continue
 		}
 
-		targetVal.Field(i).Set(srcVal.Field(i))
+		field := targetVal.Field(index)
+
+		field.Set(srcVal.Field(index))
+		set.Add(index)
 	}
 
 	return target, nil
