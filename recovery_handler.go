@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/xuender/kgin/valid"
 )
 
 func RecoveryHandler(ctx *gin.Context) {
@@ -16,6 +17,12 @@ func RecoveryHandler(ctx *gin.Context) {
 func deferRecover(ctx *gin.Context) {
 	err := recover()
 	if err == nil {
+		return
+	}
+
+	if data, ok := err.(valid.BadRequestError); ok {
+		ctx.String(http.StatusBadRequest, data.Error())
+
 		return
 	}
 
