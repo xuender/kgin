@@ -57,15 +57,15 @@ func PostValue[T Post](src, target T) (T, error) {
 		return target, err
 	}
 
-	newVal := reflect.ValueOf(src)
-	val := reflect.ValueOf(target)
+	srcVal := reflect.ValueOf(src)
+	targetVal := reflect.ValueOf(target)
 
-	if newVal.Kind() == reflect.Ptr {
-		newVal = newVal.Elem()
+	if srcVal.Kind() == reflect.Ptr {
+		srcVal = srcVal.Elem()
 	}
 
-	if val.Kind() == reflect.Ptr {
-		val = val.Elem()
+	if targetVal.Kind() == reflect.Ptr {
+		targetVal = targetVal.Elem()
 	}
 
 	for _, vali := range src.ValidationPost().Validators() {
@@ -74,7 +74,7 @@ func PostValue[T Post](src, target T) (T, error) {
 			continue
 		}
 
-		val.Field(i).Set(newVal.Field(i))
+		targetVal.Field(i).Set(srcVal.Field(i))
 	}
 
 	return target, nil
@@ -88,7 +88,6 @@ func PutValue[T Put](src, target T) (T, error) {
 
 	srcVal := reflect.ValueOf(src)
 	targetVal := reflect.ValueOf(target)
-	typ := reflect.TypeOf(target)
 
 	if srcVal.Kind() == reflect.Ptr {
 		srcVal = srcVal.Elem()
@@ -96,22 +95,17 @@ func PutValue[T Put](src, target T) (T, error) {
 
 	if targetVal.Kind() == reflect.Ptr {
 		targetVal = targetVal.Elem()
-		typ = typ.Elem()
 	}
 
 	src.ValidationPut().Validators()
 
 	for _, vali := range src.ValidationPut().Validators() {
-		slog.Info("put1", "field", vali.Name())
-
-		if _, has := typ.FieldByName(vali.Name()); !has {
+		i := _cache.Get(src, vali.Name())
+		if i < 0 {
 			continue
 		}
 
-		slog.Info("put2", "field", vali.Name())
-
-		targetVal.FieldByName(vali.Name()).
-			Set(srcVal.FieldByName(vali.Name()))
+		targetVal.Field(i).Set(srcVal.Field(i))
 	}
 
 	return target, nil
