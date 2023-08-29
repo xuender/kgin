@@ -14,7 +14,7 @@ func BindPut[T Put](ctx *gin.Context, old T) (T, error) {
 	if err := ctx.Bind(newT); err != nil {
 		slog.Error("bind", err)
 
-		return old, BadRequestError(err)
+		return old, NewBadRequestError(err)
 	}
 
 	slog.Info("bind", "new", newT)
@@ -45,7 +45,7 @@ func BindPost[T Post](ctx *gin.Context, old T) (T, error) {
 	newT := NewPoint(old)
 
 	if err := ctx.Bind(newT); err != nil {
-		return old, BadRequestError(err)
+		return old, NewBadRequestError(err)
 	}
 
 	return PostValue(newT, old)
@@ -54,7 +54,7 @@ func BindPost[T Post](ctx *gin.Context, old T) (T, error) {
 // PostValue Post并校验.
 func PostValue[T Post](src, target T) (T, error) {
 	if err := src.ValidatePost(); err != nil {
-		return target, BadRequestError(err)
+		return target, NewBadRequestError(err)
 	}
 
 	srcVal := reflect.ValueOf(src)
@@ -83,7 +83,7 @@ func PostValue[T Post](src, target T) (T, error) {
 // PutValue Put并校验.
 func PutValue[T Put](src, target T) (T, error) {
 	if err := src.ValidatePut(); err != nil {
-		return target, BadRequestError(err)
+		return target, NewBadRequestError(err)
 	}
 
 	srcVal := reflect.ValueOf(src)
