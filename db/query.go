@@ -2,6 +2,8 @@ package db
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/samber/lo"
+	"github.com/xuender/kgin/valid"
 	"github.com/xuender/kit/types"
 	"gorm.io/gorm"
 )
@@ -12,10 +14,11 @@ var (
 	_offset = [...]string{"offset", "o", "start", "s"}
 )
 
-func Query(ctx *gin.Context, gdb *gorm.DB) *gorm.DB {
+func Query[T valid.Valid](ctx *gin.Context, gdb *gorm.DB) *Result[T] {
 	var (
 		limit  = 100
 		offset = 0
+		count  int64
 	)
 
 	for _, key := range _limits {
@@ -38,5 +41,17 @@ func Query(ctx *gin.Context, gdb *gorm.DB) *gorm.DB {
 		}
 	}
 
-	return gdb.Limit(limit).Offset(offset)
+	gdb = gdb.Model(new(T))
+
+	lo.Must0(gdb.Count(&count).Error)
+
+	list := []T{}
+	lo.Must0(gdb.Limit(limit).Offset(offset).Find(&list).Error)
+
+	return &Result[T]{
+		Count:  count,
+		Limit:  limit,
+		Offset: offset,
+		Data:   list,
+	}
 }
