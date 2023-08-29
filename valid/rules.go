@@ -34,7 +34,7 @@ func newRules(validators []xvalid.Validator) Rules {
 	return rmap
 }
 
-func ValidationPut(models ...Put) map[string]Rules {
+func Validation(method string, models ...Valid) map[string]Rules {
 	ret := map[string]Rules{}
 
 	for _, model := range models {
@@ -44,32 +44,12 @@ func ValidationPut(models ...Put) map[string]Rules {
 		}
 
 		key := val.Type().Name()
-		ret[key] = putRules(model)
+		ret[key] = getRules(model, method)
 	}
 
 	return ret
 }
 
-func ValidationPost(models ...Post) map[string]Rules {
-	ret := map[string]Rules{}
-
-	for _, model := range models {
-		val := reflect.ValueOf(model)
-		if val.Kind() == reflect.Ptr {
-			val = val.Elem()
-		}
-
-		key := val.Type().Name()
-		ret[key] = postRules(model)
-	}
-
-	return ret
-}
-
-func postRules(put Post) Rules {
-	return newRules(put.ValidationPost().Validators())
-}
-
-func putRules(put Put) Rules {
-	return newRules(put.ValidationPut().Validators())
+func getRules(put Valid, method string) Rules {
+	return newRules(put.Validation(method).Validators())
 }

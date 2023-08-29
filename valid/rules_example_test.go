@@ -3,14 +3,15 @@ package valid_test
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/samber/lo"
 	"github.com/xuender/kgin/valid"
 )
 
 // nolint: lll
-func ExampleValidationPut() {
-	data := lo.Must1(json.Marshal(valid.ValidationPut(&Model{})))
+func ExampleValidation_put() {
+	data := lo.Must1(json.Marshal(valid.Validation(http.MethodPut, &Model{})))
 	fmt.Println(string(data))
 
 	// Output:
@@ -18,8 +19,8 @@ func ExampleValidationPut() {
 }
 
 // nolint: lll
-func ExampleValidationPost() {
-	data := lo.Must1(json.Marshal(valid.ValidationPost(&Model{})))
+func ExampleValidation_post() {
+	data := lo.Must1(json.Marshal(valid.Validation(http.MethodPost, &Model{})))
 	fmt.Println(string(data))
 
 	// Output:

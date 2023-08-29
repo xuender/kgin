@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// BindPut 数据绑定并校验.
-func BindPut[T Put](ctx *gin.Context, old T) (T, error) {
+// Bind 数据绑定并校验.
+func Bind[T Valid](ctx *gin.Context, method string, old T) (T, error) {
 	newT := NewPoint(old)
 
 	if err := ctx.Bind(newT); err != nil {
@@ -19,7 +19,7 @@ func BindPut[T Put](ctx *gin.Context, old T) (T, error) {
 
 	slog.Info("bind", "new", newT)
 
-	return PutValue(newT, old)
+	return Value(newT, old, method)
 }
 
 func NewPoint[T any](src T) T {
@@ -40,20 +40,9 @@ func NewPoint[T any](src T) T {
 	return ret
 }
 
-// BindPost 数据绑定并校验.
-func BindPost[T Post](ctx *gin.Context, old T) (T, error) {
-	newT := NewPoint(old)
-
-	if err := ctx.Bind(newT); err != nil {
-		return old, NewBadRequestError(err)
-	}
-
-	return PostValue(newT, old)
-}
-
-// PostValue Post并校验.
-func PostValue[T Post](src, target T) (T, error) {
-	if err := src.ValidatePost(); err != nil {
+// Value Post并校验.
+func Value[T Valid](src, target T, method string) (T, error) {
+	if err := src.Validate(method); err != nil {
 		return target, NewBadRequestError(err)
 	}
 
@@ -68,38 +57,7 @@ func PostValue[T Post](src, target T) (T, error) {
 		targetVal = targetVal.Elem()
 	}
 
-	for _, vali := range src.ValidationPost().Validators() {
-		i := _cache.Get(src, vali.Name())
-		if i < 0 {
-			continue
-		}
-
-		targetVal.Field(i).Set(srcVal.Field(i))
-	}
-
-	return target, nil
-}
-
-// PutValue Put并校验.
-func PutValue[T Put](src, target T) (T, error) {
-	if err := src.ValidatePut(); err != nil {
-		return target, NewBadRequestError(err)
-	}
-
-	srcVal := reflect.ValueOf(src)
-	targetVal := reflect.ValueOf(target)
-
-	if srcVal.Kind() == reflect.Ptr {
-		srcVal = srcVal.Elem()
-	}
-
-	if targetVal.Kind() == reflect.Ptr {
-		targetVal = targetVal.Elem()
-	}
-
-	src.ValidationPut().Validators()
-
-	for _, vali := range src.ValidationPut().Validators() {
+	for _, vali := range src.Validation(method).Validators() {
 		i := _cache.Get(src, vali.Name())
 		if i < 0 {
 			continue
