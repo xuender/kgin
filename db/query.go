@@ -8,12 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// nolint: gochecknoglobals
-var (
-	_limits = [...]string{"limit", "l", "length"}
-	_offset = [...]string{"offset", "o", "start", "s"}
-)
-
 func Query[T valid.Valid](ctx *gin.Context, gdb *gorm.DB) *Result[T] {
 	var (
 		limit  = 100
@@ -21,24 +15,12 @@ func Query[T valid.Valid](ctx *gin.Context, gdb *gorm.DB) *Result[T] {
 		count  int64
 	)
 
-	for _, key := range _limits {
-		if value := ctx.Query(key); value != "" {
-			if num, err := types.ParseInteger[int](value); err == nil {
-				limit = num
-
-				break
-			}
-		}
+	if num, err := types.ParseInteger[int](ctx.DefaultQuery("limit", "100")); err == nil {
+		limit = num
 	}
 
-	for _, key := range _offset {
-		if value := ctx.Query(key); value != "" {
-			if num, err := types.ParseInteger[int](value); err == nil {
-				offset = num
-
-				break
-			}
-		}
+	if num, err := types.ParseInteger[int](ctx.DefaultQuery("offset", "0")); err == nil {
+		offset = num
 	}
 
 	gdb = gdb.Model(new(T))
