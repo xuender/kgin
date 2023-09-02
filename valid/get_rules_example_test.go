@@ -10,8 +10,8 @@ import (
 )
 
 // nolint: lll
-func ExampleValidation_put() {
-	data := lo.Must1(json.Marshal(valid.Validation(http.MethodPut, &Model{})))
+func ExampleGetRules_put() {
+	data := lo.Must1(json.Marshal(valid.GetRules(http.MethodPut, &Model{})))
 	fmt.Println(string(data))
 
 	// Output:
@@ -19,8 +19,8 @@ func ExampleValidation_put() {
 }
 
 // nolint: lll
-func ExampleValidation_post() {
-	data := lo.Must1(json.Marshal(valid.Validation(http.MethodPost, &Model{})))
+func ExampleGetRules_post() {
+	data := lo.Must1(json.Marshal(valid.GetRules(http.MethodPost, &Model{})))
 	fmt.Println(string(data))
 
 	// Output:

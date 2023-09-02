@@ -3,10 +3,11 @@ package kgin
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/xuender/kgin/valid"
-	"github.com/xuender/kit/types"
+	"github.com/xuender/kit/base"
 )
 
 func RecoveryHandler(ctx *gin.Context) {
@@ -30,20 +31,17 @@ func deferRecover(ctx *gin.Context) {
 	switch data := err.(type) {
 	case string:
 		if len(data) > 4 && data[3] == ':' {
-			if code, err := types.ParseInteger[int](data[:3]); err == nil {
-				ctx.String(code, data[4:])
+			if code, err := strconv.ParseInt(data[:3], base.Ten, base.SixtyFour); err == nil {
+				ctx.String(int(code), data[4:])
 
 				return
 			}
 		}
 
 		ctx.String(http.StatusInternalServerError, data)
-	case NotFoundError:
-		ctx.String(http.StatusNotFound, data.Error())
-	case NotFoundIDError:
-		ctx.String(http.StatusNotFound, data.Error())
-	case NotFoundKeyError:
-		ctx.String(http.StatusNotFound, data.Error())
+	case NotFoundError, NotFoundIDError, NotFoundKeyError:
+		err, _ := data.(error)
+		ctx.String(http.StatusNotFound, err.Error())
 	case error:
 		ctx.String(http.StatusInternalServerError, data.Error())
 	default:

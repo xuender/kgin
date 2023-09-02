@@ -6,7 +6,7 @@ import (
 	"github.com/xuender/kvalid"
 )
 
-func Validation(method string, models ...kvalid.RuleHolder) map[string]*kvalid.Rules {
+func GetRules(method string, models ...kvalid.RuleHolder) map[string]*kvalid.Rules {
 	ret := map[string]*kvalid.Rules{}
 
 	for _, model := range models {
@@ -15,8 +15,7 @@ func Validation(method string, models ...kvalid.RuleHolder) map[string]*kvalid.R
 			val = val.Elem()
 		}
 
-		key := val.Type().Name()
-		ret[key] = model.Validation(method)
+		ret[val.Type().Name()] = model.Validation(method)
 	}
 
 	return ret

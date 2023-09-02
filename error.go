@@ -20,7 +20,7 @@ func (p NotFoundIDError) Error() string {
 }
 
 func (p NotFoundIDError) String() string {
-	return fmt.Sprintf("%d 未找到", p)
+	return fmt.Sprintf("%d not found id", p)
 }
 
 type NotFoundKeyError string
@@ -30,7 +30,7 @@ func (p NotFoundKeyError) Error() string {
 }
 
 func (p NotFoundKeyError) String() string {
-	return fmt.Sprintf("%s 未找到", string(p))
+	return fmt.Sprintf("%s not found key", string(p))
 }
 
 type NotFoundError string

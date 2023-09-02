@@ -24,7 +24,7 @@ func (p *Service) Add(method string, holders ...kvalid.RuleHolder) {
 		p.valids[method] = valids
 	}
 
-	for key, value := range Validation(method, holders...) {
+	for key, value := range GetRules(method, holders...) {
 		valids[key] = value
 	}
 }

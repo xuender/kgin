@@ -2,14 +2,13 @@ module github.com/xuender/kgin
 
 go 1.21
 
-replace github.com/xuender/kvalid => ../kvalid
+// replace github.com/xuender/kvalid => ../kvalid
 
 require (
-	github.com/AgentCosmic/xvalid v1.1.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/samber/lo v1.38.1
 	github.com/xuender/kit v1.0.35
-	github.com/xuender/kvalid v1.0.2
+	github.com/xuender/kvalid v1.0.3
 	gorm.io/gorm v1.25.4
 )
 

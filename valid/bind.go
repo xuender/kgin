@@ -20,10 +20,7 @@ func Bind[T kvalid.RuleHolder](ctx *gin.Context, method string, old T) (T, error
 
 	slog.Info("bind", "new", newT)
 
-	rule := old.Validation(method)
-	rule.Bind(newT, old)
-
-	return old, nil
+	return old, old.Validation(method).Bind(newT, old)
 }
 
 func NewPoint[T any](src T) T {
