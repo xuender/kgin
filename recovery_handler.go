@@ -38,6 +38,12 @@ func deferRecover(ctx *gin.Context) {
 		}
 
 		ctx.String(http.StatusInternalServerError, data)
+	case NotFoundError:
+		ctx.String(http.StatusNotFound, data.Error())
+	case NotFoundIDError:
+		ctx.String(http.StatusNotFound, data.Error())
+	case NotFoundKeyError:
+		ctx.String(http.StatusNotFound, data.Error())
 	case error:
 		ctx.String(http.StatusInternalServerError, data.Error())
 	default:

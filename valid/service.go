@@ -4,26 +4,27 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/xuender/kvalid"
 )
 
 type Service struct {
-	valids map[string]map[string]Rules
+	valids map[string]map[string]*kvalid.Rules
 }
 
 func NewService() *Service {
 	return &Service{
-		valids: make(map[string]map[string]Rules),
+		valids: make(map[string]map[string]*kvalid.Rules),
 	}
 }
 
-func (p *Service) Add(method string, puts ...Valid) {
+func (p *Service) Add(method string, holders ...kvalid.RuleHolder) {
 	valids, has := p.valids[method]
 	if !has {
-		valids = map[string]Rules{}
+		valids = map[string]*kvalid.Rules{}
 		p.valids[method] = valids
 	}
 
-	for key, value := range Validation(method, puts...) {
+	for key, value := range Validation(method, holders...) {
 		valids[key] = value
 	}
 }

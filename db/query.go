@@ -3,12 +3,12 @@ package db
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
-	"github.com/xuender/kgin/valid"
 	"github.com/xuender/kit/types"
+	"github.com/xuender/kvalid"
 	"gorm.io/gorm"
 )
 
-func Query[T valid.Valid](ctx *gin.Context, gdb *gorm.DB) *Result[T] {
+func Query[T kvalid.RuleHolder](ctx *gin.Context, gdb *gorm.DB) *Result[T] {
 	var (
 		limit  = 100
 		offset = 0

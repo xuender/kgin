@@ -15,7 +15,7 @@ func ExampleValidation_put() {
 	fmt.Println(string(data))
 
 	// Output:
-	// {"Model":{"Name":[{"rule":"required"},{"rule":"minStr","min":3},{"rule":"maxStr","max":10}]}}
+	// {"Model":{"Name":[{"rule":"required","msg":"名称必填"},{"rule":"minStr","min":3,"msg":"名称最少3个字"},{"rule":"maxStr","max":10,"msg":"名称最多10个字"}]}}
 }
 
 // nolint: lll
@@ -24,5 +24,5 @@ func ExampleValidation_post() {
 	fmt.Println(string(data))
 
 	// Output:
-	// {"Model":{"Name":[{"rule":"required"},{"rule":"minStr","min":3},{"rule":"maxStr","max":10}],"age":[{"rule":"minInt","min":10},{"rule":"maxInt","max":40}]}}
+	// {"Model":{"Name":[{"rule":"required","msg":"名称必填"},{"rule":"minStr","min":3,"msg":"名称最少3个字"},{"rule":"maxStr","max":10,"msg":"名称最多10个字"}],"age":[{"rule":"minNum","min":10,"msg":"最小年龄10岁"},{"rule":"maxNum","max":40,"msg":"最大年龄40岁"}]}}
 }

@@ -14,7 +14,7 @@ test:
 	go test -race -v ./... -gcflags=all=-l -cover
 
 watch-test:
-	reflex -t 50ms -s -- sh -c 'gotest -v ./...'
+	reflex -t 50ms -s -- sh -c 'go test -v ./...'
 
 clean:
 	rm -rf dist

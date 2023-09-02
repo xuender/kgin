@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/AgentCosmic/xvalid"
 	"github.com/samber/lo"
-	"github.com/xuender/kgin/valid"
+	"github.com/xuender/kvalid"
 )
 
 type Model struct {
@@ -14,38 +13,39 @@ type Model struct {
 	Age  int `json:"age,omitempty"`
 }
 
-func (p Model) Validation(method string) xvalid.Rules {
+func (p *Model) Validation(method string) *kvalid.Rules {
 	switch method {
 	case http.MethodPost:
-		return xvalid.New(&p).
+		return kvalid.New(p).
 			Field(&p.Name,
-				xvalid.Required().SetMessage("名称必填"),
-				xvalid.MinStr(3).Optional().SetMessage("名称最少3个字"),
-				xvalid.MaxStr(10).SetMessage("名称最多10个字"),
+				kvalid.Required().SetMessage("名称必填"),
+				kvalid.MinStr(3).Optional().SetMessage("名称最少3个字"),
+				kvalid.MaxStr(10).SetMessage("名称最多10个字"),
 			).
 			Field(&p.Age,
-				xvalid.MinInt(10).SetMessage("最小年龄10岁"),
-				xvalid.MaxInt(40).SetMessage("最大年龄40岁"),
+				kvalid.MinNum(10).SetMessage("最小年龄10岁"),
+				kvalid.MaxNum(40).SetMessage("最大年龄40岁"),
 			)
 	default:
-		return xvalid.New(&p).
+		return kvalid.New(p).
 			Field(&p.Name,
-				xvalid.Required().SetMessage("名称必填"),
-				xvalid.MinStr(3).Optional().SetMessage("名称最少3个字"),
-				xvalid.MaxStr(10).SetMessage("名称最多10个字"),
+				kvalid.Required().SetMessage("名称必填"),
+				kvalid.MinStr(3).Optional().SetMessage("名称最少3个字"),
+				kvalid.MaxStr(10).SetMessage("名称最多10个字"),
 			)
 	}
 }
 
-func (p Model) Validate(method string) error {
+func (p *Model) Validate(method string) error {
 	return p.Validation(method).Validate(p)
 }
 
-func ExampleValue_post() {
+func ExampleBind_post() {
 	mod := &Model{Name: "new name", Age: 18}
 	old := &Model{Name: "old name", Age: 28}
+	rule := mod.Validation(http.MethodPost)
 
-	lo.Must1(valid.Value(mod, old, http.MethodPost))
+	lo.Must0(rule.Bind(mod, old))
 	fmt.Println(old.Name)
 	fmt.Println(old.Age)
 
@@ -54,11 +54,12 @@ func ExampleValue_post() {
 	// 18
 }
 
-func ExampleValue_put() {
+func ExampleBind_put() {
 	mod := &Model{Name: "new name", Age: 18}
 	old := &Model{Name: "old name", Age: 28}
+	rule := mod.Validation(http.MethodPut)
 
-	lo.Must1(valid.Value(mod, old, http.MethodPut))
+	lo.Must0(rule.Bind(mod, old))
 	fmt.Println(old.Name)
 	fmt.Println(old.Age)
 

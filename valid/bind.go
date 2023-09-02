@@ -5,11 +5,11 @@ import (
 	"reflect"
 
 	"github.com/gin-gonic/gin"
-	"github.com/xuender/kit/set"
+	"github.com/xuender/kvalid"
 )
 
 // Bind 数据绑定并校验.
-func Bind[T Valid](ctx *gin.Context, method string, old T) (T, error) {
+func Bind[T kvalid.RuleHolder](ctx *gin.Context, method string, old T) (T, error) {
 	newT := NewPoint(old)
 
 	if err := ctx.Bind(newT); err != nil {
@@ -20,7 +20,10 @@ func Bind[T Valid](ctx *gin.Context, method string, old T) (T, error) {
 
 	slog.Info("bind", "new", newT)
 
-	return Value(newT, old, method)
+	rule := old.Validation(method)
+	rule.Bind(newT, old)
+
+	return old, nil
 }
 
 func NewPoint[T any](src T) T {
@@ -39,38 +42,4 @@ func NewPoint[T any](src T) T {
 	slog.Error("NewPoint error")
 
 	return ret
-}
-
-// Value Post并校验.
-func Value[T Valid](src, target T, method string) (T, error) {
-	if err := src.Validate(method); err != nil {
-		return target, NewBadRequestError(err)
-	}
-
-	srcVal := reflect.ValueOf(src)
-	targetVal := reflect.ValueOf(target)
-
-	if srcVal.Kind() == reflect.Ptr {
-		srcVal = srcVal.Elem()
-	}
-
-	if targetVal.Kind() == reflect.Ptr {
-		targetVal = targetVal.Elem()
-	}
-
-	set := set.NewSet[int]()
-
-	for _, vali := range src.Validation(method).Validators() {
-		index := _cache.Get(src, vali.Name())
-		if index < 0 || set.Has(index) {
-			continue
-		}
-
-		field := targetVal.Field(index)
-
-		field.Set(srcVal.Field(index))
-		set.Add(index)
-	}
-
-	return target, nil
 }

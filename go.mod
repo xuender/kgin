@@ -2,20 +2,21 @@ module github.com/xuender/kgin
 
 go 1.21
 
-// replace github.com/xx/xx => ../xx
+replace github.com/xuender/kvalid => ../kvalid
 
 require (
 	github.com/AgentCosmic/xvalid v1.1.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/samber/lo v1.38.1
-	github.com/xuender/kdb v1.0.1
 	github.com/xuender/kit v1.0.35
+	github.com/xuender/kvalid v1.0.2
 	gorm.io/gorm v1.25.4
 )
 
 require (
-	github.com/bytedance/sonic v1.9.1 // indirect
-	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
+	github.com/bytedance/sonic v1.10.0 // indirect
+	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
+	github.com/chenzhuoyu/iasm v0.9.0 // indirect
 	github.com/dchest/siphash v1.2.3 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
@@ -36,9 +37,9 @@ require (
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/crypto v0.9.0 // indirect
-	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
+	golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63 // indirect
 	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/sys v0.11.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/guregu/null.v3 v3.5.0 // indirect
