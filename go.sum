@@ -79,8 +79,8 @@ github.com/ugorji/go/codec v1.2.11 h1:BMaWp1Bb6fHwEtbplGBGJ498wD+LKlNSl25MjdZY4d
 github.com/ugorji/go/codec v1.2.11/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
 github.com/xuender/kit v1.0.35 h1:ZM2/YoXA/i62sV5dfW/TMi5pCi7xHFZhKwl8+BWMrjI=
 github.com/xuender/kit v1.0.35/go.mod h1:Eh+cNelAMF4kdqorsWLLt9TmmqSo1vBjEoiMsj3Tp/8=
-github.com/xuender/kvalid v1.0.3 h1:+AbgiNGWPXCOTshqRD3TGs9+bfB0C4LudUMIsIrNfhQ=
-github.com/xuender/kvalid v1.0.3/go.mod h1:Ul9SuhBk1D3hjDCf2q4qADVLYlEE+cRrvImDwULTsAk=
+github.com/xuender/kvalid v1.0.4 h1:NQDhGItf3F+BfM8FxJBVFGAv8rPyDGGgAHaVm6f4fA8=
+github.com/xuender/kvalid v1.0.4/go.mod h1:Ul9SuhBk1D3hjDCf2q4qADVLYlEE+cRrvImDwULTsAk=
 golang.org/x/arch v0.0.0-20210923205945-b76863e36670/go.mod h1:5om86z9Hs0C8fWVUuoMHwpExlXzs5Tkyp9hOrfG7pp8=
 golang.org/x/arch v0.3.0 h1:02VY4/ZcO/gBOH6PUaoiptASxtXU10jazRCP865E97k=
 golang.org/x/arch v0.3.0/go.mod h1:5om86z9Hs0C8fWVUuoMHwpExlXzs5Tkyp9hOrfG7pp8=

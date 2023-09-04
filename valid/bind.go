@@ -9,18 +9,18 @@ import (
 )
 
 // Bind 数据绑定并校验.
-func Bind[T kvalid.RuleHolder](ctx *gin.Context, method string, old T) (T, error) {
+func Bind[T kvalid.RuleHolder[T]](ctx *gin.Context, method string, old T) error {
 	newT := NewPoint(old)
 
 	if err := ctx.Bind(newT); err != nil {
 		slog.Error("bind", err)
 
-		return old, NewBadRequestError(err)
+		return NewBadRequestError(err)
 	}
 
 	slog.Info("bind", "new", newT)
 
-	return old, old.Validation(method).Bind(newT, old)
+	return NewBadRequestError(old.Validation(method).Bind(newT, old))
 }
 
 func NewPoint[T any](src T) T {

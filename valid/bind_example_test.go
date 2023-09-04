@@ -13,7 +13,7 @@ type Model struct {
 	Age  int `json:"age,omitempty"`
 }
 
-func (p *Model) Validation(method string) *kvalid.Rules {
+func (p *Model) Validation(method string) *kvalid.Rules[*Model] {
 	switch method {
 	case http.MethodPost:
 		return kvalid.New(p).

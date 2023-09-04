@@ -1,32 +1,37 @@
 package valid
 
 import (
+	"encoding/json"
 	"net/http"
+	"reflect"
 
 	"github.com/gin-gonic/gin"
 	"github.com/xuender/kvalid"
 )
 
 type Service struct {
-	valids map[string]map[string]*kvalid.Rules
+	valids map[string]map[string]json.Marshaler
 }
 
 func NewService() *Service {
 	return &Service{
-		valids: make(map[string]map[string]*kvalid.Rules),
+		valids: make(map[string]map[string]json.Marshaler),
 	}
 }
 
-func (p *Service) Add(method string, holders ...kvalid.RuleHolder) {
-	valids, has := p.valids[method]
-	if !has {
-		valids = map[string]*kvalid.Rules{}
-		p.valids[method] = valids
+func (p *Service) Add(jsoners ...kvalid.ValidJSONer) {
+	for _, jsoner := range jsoners {
+		p.valids[getName(jsoner)] = jsoner.ValidJSON()
+	}
+}
+
+func getName(model kvalid.ValidJSONer) string {
+	val := reflect.ValueOf(model)
+	if val.Kind() == reflect.Ptr {
+		val = val.Elem()
 	}
 
-	for key, value := range GetRules(method, holders...) {
-		valids[key] = value
-	}
+	return val.Type().Name()
 }
 
 func (p *Service) Router(group *gin.RouterGroup) {

@@ -7,7 +7,11 @@ import (
 
 type BadRequestError string
 
-func NewBadRequestError(err error) BadRequestError {
+func NewBadRequestError(err error) error {
+	if err == nil {
+		return nil
+	}
+
 	return BadRequestError(err.Error())
 }
 

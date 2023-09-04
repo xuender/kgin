@@ -8,7 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/samber/lo v1.38.1
 	github.com/xuender/kit v1.0.35
-	github.com/xuender/kvalid v1.0.3
+	github.com/xuender/kvalid v1.0.4
 	gorm.io/gorm v1.25.4
 )
 

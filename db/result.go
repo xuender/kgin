@@ -1,10 +1,6 @@
 package db
 
-import (
-	"github.com/xuender/kvalid"
-)
-
-type Result[T kvalid.RuleHolder] struct {
+type Result[T any] struct {
 	Count  int64 `json:"count,omitempty"`
 	Limit  int   `json:"limit,omitempty"`
 	Offset int   `json:"offset,omitempty"`

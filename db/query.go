@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Query[T kvalid.RuleHolder](ctx *gin.Context, gdb *gorm.DB) *Result[T] {
+func Query[T kvalid.RuleHolder[T]](ctx *gin.Context, gdb *gorm.DB) *Result[T] {
 	var (
 		limit  = 100
 		offset = 0
