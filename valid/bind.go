@@ -1,7 +1,6 @@
 package valid
 
 import (
-	"log/slog"
 	"reflect"
 
 	"github.com/gin-gonic/gin"
@@ -13,12 +12,8 @@ func Bind[T kvalid.RuleHolder[T]](ctx *gin.Context, method string, old T) error 
 	newT := NewPoint(old)
 
 	if err := ctx.Bind(newT); err != nil {
-		slog.Error("bind", err)
-
 		return NewBadRequestError(err)
 	}
-
-	slog.Info("bind", "new", newT)
 
 	return NewBadRequestError(old.Validation(method).Bind(newT, old))
 }
@@ -30,13 +25,7 @@ func NewPoint[T any](src T) T {
 	}
 
 	target := reflect.New(typ)
-
-	ret, has := target.Interface().(T)
-	if has {
-		return ret
-	}
-
-	slog.Error("NewPoint error")
+	ret, _ := target.Interface().(T)
 
 	return ret
 }

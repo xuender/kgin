@@ -1,7 +1,6 @@
 package valid
 
 import (
-	"encoding/json"
 	"net/http"
 	"reflect"
 
@@ -10,18 +9,27 @@ import (
 )
 
 type Service struct {
-	valids map[string]map[string]json.Marshaler
+	valids map[string]map[string]BytesMarshaler
 }
 
 func NewService() *Service {
 	return &Service{
-		valids: make(map[string]map[string]json.Marshaler),
+		valids: make(map[string]map[string]BytesMarshaler),
 	}
 }
 
 func (p *Service) Add(jsoners ...kvalid.ValidJSONer) {
 	for _, jsoner := range jsoners {
-		p.valids[getName(jsoner)] = jsoner.ValidJSON()
+		var (
+			validJSON = jsoner.ValidJSON()
+			bytesJSON = make(map[string]BytesMarshaler, len(validJSON))
+		)
+
+		for key, value := range validJSON {
+			bytesJSON[key] = NewBytesMarshaler(value)
+		}
+
+		p.valids[getName(jsoner)] = bytesJSON
 	}
 }
 
