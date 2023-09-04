@@ -1,4 +1,14 @@
 
+1.0.10 / 2023-09-04
+===================
+
+* feat: valid
+* feat: GetRules
+* temp
+* feat: tests, valid.Service
+* feat: db.Result
+* feat: db.Query
+
 1.0.9 / 2023-08-29
 ==================
 
