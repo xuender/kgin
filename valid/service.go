@@ -42,21 +42,20 @@ func getName(model kvalid.ValidJSONer) string {
 
 	name := val.Type().Name()
 
-	return strings.ToLower(name[:1]) + name[1:]
+	return strings.ToLower(name)
 }
 
 func (p *Service) Router(group *gin.RouterGroup) {
-	group.GET("/", p.get)
+	group.GET("/:key", p.get)
 }
 
 func (p *Service) get(ctx *gin.Context) {
-	method := ctx.DefaultQuery("method", http.MethodPost)
-
-	if val, has := p.valids[method]; has {
+	key := strings.ToLower(ctx.Param("key"))
+	if val, has := p.valids[key]; has {
 		ctx.JSON(http.StatusOK, val)
 
 		return
 	}
 
-	panic(BadRequestError("Bad Method:" + method))
+	panic(BadRequestError("bad key:" + key))
 }
