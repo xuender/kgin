@@ -3,6 +3,7 @@ package valid
 import (
 	"net/http"
 	"reflect"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/xuender/kvalid"
@@ -39,7 +40,9 @@ func getName(model kvalid.ValidJSONer) string {
 		val = val.Elem()
 	}
 
-	return val.Type().Name()
+	name := val.Type().Name()
+
+	return strings.ToLower(name[:1]) + name[1:]
 }
 
 func (p *Service) Router(group *gin.RouterGroup) {
