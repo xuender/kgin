@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 
 	"github.com/xuender/kit/times"
-	"github.com/xuender/kit/types"
 )
 
 // nolint: gochecknoglobals
@@ -14,50 +13,43 @@ var (
 	_count = [...]byte{'c', 'o', '_'}
 )
 
-func CountKey(page string) []byte {
+func CountKey(key uint64) []byte {
 	var (
-		key = pageKey(page)
-		ret = make([]byte, 0, len(key)+len(_count))
+		length   = 11
+		keyBytes = ToBytes(key)
+		ret      = make([]byte, 0, length)
 	)
 	// co_ + key
 	ret = append(ret, _count[:]...)
-	ret = append(ret, key...)
+	ret = append(ret, keyBytes...)
 
 	return ret
 }
 
-func pageKey(page string) []byte {
-	if pid, err := types.ParseInteger[uint64](page); err == nil {
-		return ToBytes(pid)
-	}
-
-	return []byte(page)
-}
-
-func PVKey(page string, day times.IntDay) []byte {
+func PVKey(key uint64, day times.IntDay) []byte {
 	var (
-		length = 7
-		key    = pageKey(page)
-		ret    = make([]byte, 0, len(key)+length)
+		length   = 15
+		keyBytes = ToBytes(key)
+		ret      = make([]byte, 0, length)
 	)
 	// pv_ + key + 日期
 	ret = append(ret, _pv[:]...)
-	ret = append(ret, key...)
+	ret = append(ret, keyBytes...)
 	ret = append(ret, day.Marshal()...)
 
 	return ret
 }
 
-func UVKey(page string, day times.IntDay) []byte {
+func UVKey(key uint64, day times.IntDay) []byte {
 	var (
-		length = 7
-		key    = pageKey(page)
-		ret    = make([]byte, 0, len(key)+length)
+		length   = 15
+		keyBytes = ToBytes(key)
+		ret      = make([]byte, 0, length)
 	)
 	// uv_ + 日期 + key
 	ret = append(ret, _uv[:]...)
 	ret = append(ret, day.Marshal()...)
-	ret = append(ret, key...)
+	ret = append(ret, keyBytes...)
 
 	return ret
 }

@@ -1,13 +1,20 @@
 package view
 
-import "github.com/xuender/kit/times"
+import (
+	"github.com/xuender/kit/times"
+)
 
 type Viewer interface {
-	View(page string, remoteIP string)
+	View(key uint64, remoteIP string) error
 }
 
 type Stat interface {
-	PV(page string, day times.IntDay) uint64
-	UV(page string, day times.IntDay) uint64
-	Count(page string) uint64
+	PV(key uint64, day times.IntDay) uint64
+	UV(key uint64, day times.IntDay) uint64
+	Count(key uint64) uint64
+}
+
+type Counter interface {
+	Viewer
+	Stat
 }

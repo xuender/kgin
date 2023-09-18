@@ -17,7 +17,7 @@ func TestPebble_PV(t *testing.T) {
 	ass := assert.New(t)
 	path := filepath.Join(os.TempDir(), "test_pv")
 	peb, err := kv.NewPebble(path)
-	page := "page"
+	page := uint64(23)
 	day := times.Now2IntDay()
 
 	ass.Nil(err)

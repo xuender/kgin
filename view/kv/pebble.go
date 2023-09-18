@@ -26,14 +26,14 @@ func (p *Pebble) Close() error {
 	return p.db.Close()
 }
 
-func (p *Pebble) PV(page string, day times.IntDay) uint64 {
-	return p.get(view.PVKey(page, day))
+func (p *Pebble) PV(key uint64, day times.IntDay) uint64 {
+	return p.get(view.PVKey(key, day))
 }
 
-func (p *Pebble) UV(page string, day times.IntDay) uint64 {
-	key := view.UVKey(page, day)
+func (p *Pebble) UV(key uint64, day times.IntDay) uint64 {
+	keyBytes := view.UVKey(key, day)
 
-	value, closer, err := p.db.Get(key)
+	value, closer, err := p.db.Get(keyBytes)
 	if err != nil {
 		return 0
 	}
@@ -48,7 +48,7 @@ func (p *Pebble) UV(page string, day times.IntDay) uint64 {
 		hll, err := hllpp.Unmarshal(value)
 		if err != nil {
 			if day < now {
-				_ = p.set(key, 0)
+				_ = p.set(keyBytes, 0)
 			}
 
 			return 0
@@ -57,7 +57,7 @@ func (p *Pebble) UV(page string, day times.IntDay) uint64 {
 		count := hll.Count()
 
 		if day < now {
-			_ = p.set(key, count)
+			_ = p.set(keyBytes, count)
 		}
 
 		return count
@@ -66,22 +66,22 @@ func (p *Pebble) UV(page string, day times.IntDay) uint64 {
 	return view.ToUint64(value)
 }
 
-func (p *Pebble) Count(page string) uint64 {
-	return p.get(view.CountKey(page))
+func (p *Pebble) Count(key uint64) uint64 {
+	return p.get(view.CountKey(key))
 }
 
-func (p *Pebble) View(page, remoteIP string) error {
+func (p *Pebble) View(key uint64, remoteIP string) error {
 	day := times.Now2IntDay()
 
-	if err := p.incr(view.CountKey(page)); err != nil {
+	if err := p.incr(view.CountKey(key)); err != nil {
 		return err
 	}
 
-	if err := p.incr(view.PVKey(page, day)); err != nil {
+	if err := p.incr(view.PVKey(key, day)); err != nil {
 		return err
 	}
 
-	uvKey := view.UVKey(page, day)
+	uvKey := view.UVKey(key, day)
 
 	return p.uv(uvKey, []byte(remoteIP))
 }
