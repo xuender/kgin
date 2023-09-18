@@ -37,3 +37,31 @@ func Query[T kvalid.RuleHolder[T]](ctx *gin.Context, gdb *gorm.DB) *Result[T] {
 		Data:   list,
 	}
 }
+
+func QueryModel[T any](ctx *gin.Context, gdb *gorm.DB) *Result[T] {
+	var (
+		limit  = 100
+		offset = 0
+		count  int64
+	)
+
+	if num, err := types.ParseInteger[int](ctx.DefaultQuery("limit", "100")); err == nil {
+		limit = num
+	}
+
+	if num, err := types.ParseInteger[int](ctx.DefaultQuery("offset", "0")); err == nil {
+		offset = num
+	}
+
+	lo.Must0(gdb.Count(&count).Error)
+
+	list := []T{}
+	lo.Must0(gdb.Limit(limit).Offset(offset).Find(&list).Error)
+
+	return &Result[T]{
+		Count:  count,
+		Limit:  limit,
+		Offset: offset,
+		Data:   list,
+	}
+}
