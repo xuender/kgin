@@ -33,7 +33,7 @@ func TestPebble_PV(t *testing.T) {
 	ass.Nil(peb.View(page, "127.0.0.2"))
 	ass.Equal(uint64(3), peb.PV(page, day))
 	ass.Equal(uint64(2), peb.UV(page, day))
-	ass.Equal(uint64(3), peb.Count(page))
+	ass.Equal(uint64(3), peb.TV(page))
 
 	day--
 
@@ -46,7 +46,7 @@ func TestPebble_PV(t *testing.T) {
 	patches.Reset()
 	ass.Equal(uint64(1), peb.PV(page, day))
 	ass.Equal(uint64(1), peb.UV(page, day))
-	ass.Equal(uint64(4), peb.Count(page))
+	ass.Equal(uint64(4), peb.TV(page))
 
 	peb.Close()
 

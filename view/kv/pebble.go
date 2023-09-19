@@ -66,14 +66,14 @@ func (p *Pebble) UV(key uint64, day times.IntDay) uint64 {
 	return view.ToUint64(value)
 }
 
-func (p *Pebble) Count(key uint64) uint64 {
-	return p.get(view.CountKey(key))
+func (p *Pebble) TV(key uint64) uint64 {
+	return p.get(view.TVKey(key))
 }
 
 func (p *Pebble) View(key uint64, remoteIP string) error {
 	day := times.Now2IntDay()
 
-	if err := p.incr(view.CountKey(key)); err != nil {
+	if err := p.incr(view.TVKey(key)); err != nil {
 		return err
 	}
 

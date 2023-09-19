@@ -11,7 +11,7 @@ type Viewer interface {
 type Stat interface {
 	PV(key uint64, day times.IntDay) uint64
 	UV(key uint64, day times.IntDay) uint64
-	Count(key uint64) uint64
+	TV(key uint64) uint64
 }
 
 type Counter interface {

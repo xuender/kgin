@@ -8,19 +8,19 @@ import (
 
 // nolint: gochecknoglobals
 var (
-	_pv    = [...]byte{'p', 'v', '_'}
-	_uv    = [...]byte{'u', 'v', '_'}
-	_count = [...]byte{'c', 'o', '_'}
+	_pv = [...]byte{'p', 'v', '_'}
+	_uv = [...]byte{'u', 'v', '_'}
+	_tv = [...]byte{'t', 'v', '_'}
 )
 
-func CountKey(key uint64) []byte {
+func TVKey(key uint64) []byte {
 	var (
 		length   = 11
 		keyBytes = ToBytes(key)
 		ret      = make([]byte, 0, length)
 	)
-	// co_ + key
-	ret = append(ret, _count[:]...)
+	// tv_ + key
+	ret = append(ret, _tv[:]...)
 	ret = append(ret, keyBytes...)
 
 	return ret
