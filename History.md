@@ -1,4 +1,14 @@
 
+1.0.11 / 2023-09-19
+===================
+
+* feat: tv
+* feat: view
+* feat: kv 计数器
+* feat: valid key
+* feat: valid key is lower
+* feat: add BytesMarshaler
+
 1.0.10 / 2023-09-04
 ===================
 
