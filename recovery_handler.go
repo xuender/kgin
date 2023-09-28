@@ -1,13 +1,16 @@
 package kgin
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/xuender/kgin/valid"
 	"github.com/xuender/kit/base"
+	"gorm.io/gorm"
 )
 
 func RecoveryHandler(ctx *gin.Context) {
@@ -22,12 +25,6 @@ func deferRecover(ctx *gin.Context) {
 		return
 	}
 
-	if data, ok := err.(valid.BadRequestError); ok {
-		ctx.String(http.StatusBadRequest, data.String())
-
-		return
-	}
-
 	switch data := err.(type) {
 	case string:
 		if len(data) > 4 && data[3] == ':' {
@@ -39,11 +36,22 @@ func deferRecover(ctx *gin.Context) {
 		}
 
 		ctx.String(http.StatusInternalServerError, data)
-	case NotFoundError, NotFoundIDError, NotFoundKeyError:
-		err, _ := data.(error)
-		ctx.String(http.StatusNotFound, err.Error())
+	case valid.BadRequestError:
+		ctx.String(http.StatusBadRequest, data.String())
 	case error:
-		ctx.String(http.StatusInternalServerError, data.Error())
+		switch {
+		case errors.Is(data, gorm.ErrRecordNotFound):
+			ctx.String(http.StatusNotFound, data.Error())
+		case errors.Is(data, valid.ErrOptimisticLock):
+			ctx.String(http.StatusConflict, data.Error())
+		default:
+			switch {
+			case strings.Contains(data.Error(), "UNIQUE"):
+				ctx.String(http.StatusBadRequest, data.Error())
+			default:
+				ctx.String(http.StatusInternalServerError, data.Error())
+			}
+		}
 	default:
 		ctx.String(http.StatusInternalServerError, fmt.Sprintf("%v", data))
 	}

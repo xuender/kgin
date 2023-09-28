@@ -1,9 +1,12 @@
 package valid
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 )
+
+var ErrOptimisticLock = errors.New("optimistic lock")
 
 type BadRequestError string
 
