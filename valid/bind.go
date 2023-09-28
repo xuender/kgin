@@ -26,31 +26,39 @@ func LockBind[T kvalid.RuleHolder[T]](ctx *gin.Context, method string, old T) er
 	}
 
 	if lock {
-		newV := reflect.ValueOf(newT)
-		if newV.Kind() == reflect.Pointer {
-			newV = newV.Elem()
-		}
-
-		newV = newV.FieldByName("UpdatedAt")
-
-		oldV := reflect.ValueOf(old)
-		if oldV.Kind() == reflect.Pointer {
-			oldV = oldV.Elem()
-		}
-
-		oldV = oldV.FieldByName("UpdatedAt")
-
-		if !newV.Equal(oldV) {
-			nv1 := newV.MethodByName("Sec").Call(nil)[0]
-			ov1 := oldV.MethodByName("Sec").Call(nil)[0]
-
-			if !nv1.Equal(ov1) {
-				return ErrOptimisticLock
-			}
+		if err := checkUpdateAt(newT, old); err != nil {
+			return err
 		}
 	}
 
 	return NewBadRequestError(old.Validation(method).Bind(newT, old))
+}
+
+func checkUpdateAt[T kvalid.RuleHolder[T]](newT, old T) error {
+	newV := reflect.ValueOf(newT)
+	if newV.Kind() == reflect.Pointer {
+		newV = newV.Elem()
+	}
+
+	newV = newV.FieldByName("UpdatedAt")
+
+	oldV := reflect.ValueOf(old)
+	if oldV.Kind() == reflect.Pointer {
+		oldV = oldV.Elem()
+	}
+
+	oldV = oldV.FieldByName("UpdatedAt")
+
+	if !newV.Equal(oldV) {
+		nv1 := newV.MethodByName("Sec").Call(nil)[0]
+		ov1 := oldV.MethodByName("Sec").Call(nil)[0]
+
+		if !nv1.Equal(ov1) {
+			return ErrOptimisticLock
+		}
+	}
+
+	return nil
 }
 
 func NewPoint[T any](src T) (T, bool) {

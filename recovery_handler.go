@@ -25,34 +25,38 @@ func deferRecover(ctx *gin.Context) {
 		return
 	}
 
-	switch data := err.(type) {
+	switch val := err.(type) {
 	case string:
-		if len(data) > 4 && data[3] == ':' {
-			if code, err := strconv.ParseInt(data[:3], base.Ten, base.SixtyFour); err == nil {
-				ctx.String(int(code), data[4:])
+		if len(val) > 4 && val[3] == ':' {
+			if code, err := strconv.ParseInt(val[:3], base.Ten, base.SixtyFour); err == nil {
+				ctx.String(int(code), val[4:])
 
 				return
 			}
 		}
 
-		ctx.String(http.StatusInternalServerError, data)
+		ctx.String(http.StatusInternalServerError, val)
 	case valid.BadRequestError:
-		ctx.String(http.StatusBadRequest, data.String())
+		ctx.String(http.StatusBadRequest, val.String())
 	case error:
-		switch {
-		case errors.Is(data, gorm.ErrRecordNotFound):
-			ctx.String(http.StatusNotFound, data.Error())
-		case errors.Is(data, valid.ErrOptimisticLock):
-			ctx.String(http.StatusConflict, data.Error())
-		default:
-			switch {
-			case strings.Contains(data.Error(), "UNIQUE"):
-				ctx.String(http.StatusBadRequest, data.Error())
-			default:
-				ctx.String(http.StatusInternalServerError, data.Error())
-			}
-		}
+		outputError(val, ctx)
 	default:
-		ctx.String(http.StatusInternalServerError, fmt.Sprintf("%v", data))
+		ctx.String(http.StatusInternalServerError, fmt.Sprintf("%v", val))
+	}
+}
+
+func outputError(err error, ctx *gin.Context) {
+	switch {
+	case errors.Is(err, gorm.ErrRecordNotFound):
+		ctx.String(http.StatusNotFound, err.Error())
+	case errors.Is(err, valid.ErrOptimisticLock):
+		ctx.String(http.StatusConflict, err.Error())
+	default:
+		switch {
+		case strings.Contains(err.Error(), "UNIQUE"):
+			ctx.String(http.StatusBadRequest, err.Error())
+		default:
+			ctx.String(http.StatusInternalServerError, err.Error())
+		}
 	}
 }
