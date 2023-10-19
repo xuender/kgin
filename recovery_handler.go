@@ -3,6 +3,7 @@ package kgin
 import (
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"strconv"
 	"strings"
@@ -35,12 +36,14 @@ func deferRecover(ctx *gin.Context) {
 			}
 		}
 
+		slog.Error("recover", "strerr", err)
 		ctx.String(http.StatusInternalServerError, val)
 	case valid.BadRequestError:
 		ctx.String(http.StatusBadRequest, val.String())
 	case error:
 		outputError(val, ctx)
 	default:
+		slog.Error("recover", "err", err)
 		ctx.String(http.StatusInternalServerError, fmt.Sprintf("%v", val))
 	}
 }
@@ -52,6 +55,8 @@ func outputError(err error, ctx *gin.Context) {
 	case errors.Is(err, valid.ErrOptimisticLock):
 		ctx.String(http.StatusConflict, err.Error())
 	default:
+		slog.Error("recover", "error", err)
+
 		switch {
 		case strings.Contains(err.Error(), "UNIQUE"):
 			ctx.String(http.StatusBadRequest, err.Error())
