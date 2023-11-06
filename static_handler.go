@@ -4,31 +4,31 @@ import (
 	"io/fs"
 	"net/http"
 	"path/filepath"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/xuender/kit/set"
 )
 
 // StaticHandler fs.
-func StaticHandler(urlPrefix string, fsys fs.FS, dirs ...string) gin.HandlerFunc {
+func StaticHandler(fsys fs.FS, dirs ...string) gin.HandlerFunc {
 	if len(dirs) > 0 {
 		fsys, _ = fs.Sub(fsys, filepath.Join(dirs...))
 	}
 
 	var (
 		handler = http.FileServer(http.FS(fsys))
-		length  = len(urlPrefix)
 		paths   = set.NewSet[string]()
 	)
 
-	if length > 0 {
-		handler = http.StripPrefix(urlPrefix, handler)
-	}
+	return func(ctx *gin.Context) {
+		if url := strings.Trim(ctx.Request.URL.Path, "/"); fsHas(url, paths, fsys) {
+			if url != "" {
+				ctx.Header(CacheControl, MaxAge1y)
+			}
 
-	return func(c *gin.Context) {
-		if fsHas(c.Request.URL.Path[length:], paths, fsys) {
-			handler.ServeHTTP(c.Writer, c.Request)
-			c.Abort()
+			handler.ServeHTTP(ctx.Writer, ctx.Request)
+			ctx.Abort()
 		}
 	}
 }

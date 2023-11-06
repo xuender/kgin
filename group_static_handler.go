@@ -3,7 +3,6 @@ package kgin
 import (
 	"io/fs"
 	"net/http"
-	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,9 +22,5 @@ func GroupHandler(group *gin.RouterGroup, fsys fs.FS, dirs ...string) {
 		}
 	})
 
-	if len(dirs) > 0 {
-		fsys, _ = fs.Sub(fsys, filepath.Join(dirs...))
-	}
-
-	group.StaticFS("", http.FS(fsys))
+	group.StaticFS("", FileSystem(fsys, dirs...))
 }

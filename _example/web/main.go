@@ -2,10 +2,9 @@ package main
 
 import (
 	"embed"
-	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/xuender/kgin"
+	"github.com/xuender/kit/los"
 )
 
 //go:embed www
@@ -17,15 +16,17 @@ var test string
 func main() {
 	app := kgin.Default()
 
-	app.Use(kgin.DirHandler("/", "_example/web/www"))
-	app.Use(kgin.StaticHandler("/www", www, "www"))
+	// app.Use(kgin.DirHandler("/", "_example/web/www"))
+	// app.Use(kgin.StaticHandler("/www", www, "www"))
 	kgin.GroupHandler(app.Group("/demo"), www, "www")
-	kgin.GroupHandler(app, www, "www")
+	// kgin.GroupHandler(app, www, "www")
 
 	app.GET("/test", kgin.HTMLHandler(test))
-	app.NoRoute(func(ctx *gin.Context) {
-		ctx.String(http.StatusNotFound, "NO FOUND...")
-	})
-	kgin.Root(app, www, "www")
-	app.Run("0.0.0.0:8080")
+	// app.NoRoute(func(ctx *gin.Context) {
+	// 	ctx.String(http.StatusNotFound, "NO FOUND...")
+	// })
+	// app.Use(app, www, "www")
+	// app.StaticFS("", kgin.FileSystem(www, "www"))
+	app.NoRoute(kgin.StaticHandler(www, "www"))
+	los.Must0(app.Run("0.0.0.0:8080"))
 }

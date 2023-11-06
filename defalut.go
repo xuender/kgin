@@ -13,7 +13,7 @@ func Default() *gin.Engine {
 		gin.SetMode(gin.ReleaseMode)
 	} else {
 		log.SetFlags(log.Lshortfile | log.LstdFlags)
-		gin.SetMode(gin.DebugMode)
+		gin.SetMode(gin.TestMode)
 	}
 
 	engine := gin.New()

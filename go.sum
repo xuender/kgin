@@ -138,6 +138,8 @@ github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS
 github.com/twitchyliquid64/golang-asm v0.15.1/go.mod h1:a1lVb/DtPvCB8fslRZhAngC2+aY1QWCk3Cedj/Gdt08=
 github.com/ugorji/go/codec v1.2.11 h1:BMaWp1Bb6fHwEtbplGBGJ498wD+LKlNSl25MjdZY4dU=
 github.com/ugorji/go/codec v1.2.11/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
+github.com/xuender/kit v1.0.40 h1:mj0b1QlgY2GY8fB6sDGX20Aqdn5ELlPdIHSABdYDwO8=
+github.com/xuender/kit v1.0.40/go.mod h1:Eh+cNelAMF4kdqorsWLLt9TmmqSo1vBjEoiMsj3Tp/8=
 github.com/xuender/kvalid v1.0.7 h1:Rhl1rEEPD0jmQS4oO/dzxgrncsynF7E/AAGulybrOJo=
 github.com/xuender/kvalid v1.0.7/go.mod h1:v28EPzUysKQG3R6QoBVtsTpcRC4N4CubUmLC2RmLEs4=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

@@ -3,7 +3,7 @@ module github.com/xuender/kgin
 go 1.21
 
 // replace github.com/xuender/kvalid => ../kvalid
-replace github.com/xuender/kit => ../kit
+// replace github.com/xuender/kit => ../kit
 
 require (
 	github.com/agiledragon/gomonkey/v2 v2.10.1
@@ -12,7 +12,7 @@ require (
 	github.com/retailnext/hllpp v1.0.0
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.4
-	github.com/xuender/kit v1.0.38
+	github.com/xuender/kit v1.0.40
 	github.com/xuender/kvalid v1.0.7
 	gorm.io/gorm v1.25.4
 )
