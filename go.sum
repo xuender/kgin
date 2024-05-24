@@ -140,8 +140,8 @@ github.com/ugorji/go/codec v1.2.11 h1:BMaWp1Bb6fHwEtbplGBGJ498wD+LKlNSl25MjdZY4d
 github.com/ugorji/go/codec v1.2.11/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
 github.com/xuender/kit v1.0.40 h1:mj0b1QlgY2GY8fB6sDGX20Aqdn5ELlPdIHSABdYDwO8=
 github.com/xuender/kit v1.0.40/go.mod h1:Eh+cNelAMF4kdqorsWLLt9TmmqSo1vBjEoiMsj3Tp/8=
-github.com/xuender/kvalid v1.0.11 h1:oq9PUbD6YJEgTjcxVoCymysvDhdPZtxWjWjah4ZYevk=
-github.com/xuender/kvalid v1.0.11/go.mod h1:v28EPzUysKQG3R6QoBVtsTpcRC4N4CubUmLC2RmLEs4=
+github.com/xuender/kvalid v1.0.12 h1:kpLZY6EZI8RFTdujaQzmTjM4k2xOP0OjVEzEuHdKWHQ=
+github.com/xuender/kvalid v1.0.12/go.mod h1:v28EPzUysKQG3R6QoBVtsTpcRC4N4CubUmLC2RmLEs4=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 golang.org/x/arch v0.0.0-20210923205945-b76863e36670/go.mod h1:5om86z9Hs0C8fWVUuoMHwpExlXzs5Tkyp9hOrfG7pp8=
