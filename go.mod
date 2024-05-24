@@ -13,7 +13,7 @@ require (
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.4
 	github.com/xuender/kit v1.0.40
-	github.com/xuender/kvalid v1.0.7
+	github.com/xuender/kvalid v1.0.11
 	gorm.io/gorm v1.25.4
 )
 
