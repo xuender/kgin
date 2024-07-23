@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 
+	"github.com/gin-gonic/gin"
 	"github.com/xuender/kgin"
 	"github.com/xuender/kit/los"
 )
@@ -14,19 +15,8 @@ var www embed.FS
 var test string
 
 func main() {
-	app := kgin.Default()
-
-	// app.Use(kgin.DirHandler("/", "_example/web/www"))
-	// app.Use(kgin.StaticHandler("/www", www, "www"))
-	kgin.GroupHandler(app.Group("/demo"), www, "www")
-	// kgin.GroupHandler(app, www, "www")
-
+	app := gin.Default()
 	app.GET("/test", kgin.HTMLHandler(test))
-	// app.NoRoute(func(ctx *gin.Context) {
-	// 	ctx.String(http.StatusNotFound, "NO FOUND...")
-	// })
-	// app.Use(app, www, "www")
-	// app.StaticFS("", kgin.FileSystem(www, "www"))
-	app.NoRoute(kgin.StaticHandler(www, "www"))
+	_ = kgin.Embed(&app.RouterGroup, www, "www")
 	los.Must0(app.Run("0.0.0.0:8080"))
 }

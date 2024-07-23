@@ -1,6 +1,6 @@
 module github.com/xuender/kgin
 
-go 1.21
+go 1.22
 
 // replace github.com/xuender/kvalid => ../kvalid
 // replace github.com/xuender/kit => ../kit
