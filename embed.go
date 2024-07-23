@@ -46,7 +46,7 @@ func Embed(group *gin.RouterGroup, fsys embed.FS, dir string) error {
 				continue
 			}
 
-			url := filepath.Join(sub, item.Name())[len(dir):]
+			url := strings.Trim(filepath.Join(sub, item.Name())[len(dir):], "/")
 
 			group.GET(url, hander)
 			group.HEAD(url, hander)
