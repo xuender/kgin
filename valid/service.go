@@ -1,11 +1,14 @@
 package valid
 
 import (
+	"encoding/hex"
 	"net/http"
 	"reflect"
+	"sort"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/xuender/kit/hash"
 	"github.com/xuender/kvalid"
 )
 
@@ -47,6 +50,29 @@ func getName(model kvalid.ValidJSONer) string {
 
 func (p *Service) Router(group *gin.RouterGroup) {
 	group.GET("/:key", p.get)
+}
+
+func (p *Service) Etag(ctx *gin.Context) string {
+	key := strings.ToLower(ctx.Param("key"))
+	if val, has := p.valids[key]; has {
+		keys := make([]string, 0, len(val))
+		for key := range val {
+			keys = append(keys, key)
+		}
+
+		sort.Strings(keys)
+
+		sum := hash.NewSipHash64()
+
+		for _, key := range keys {
+			sum.Write([]byte(key))
+			sum.Write(val[key])
+		}
+
+		return hex.EncodeToString(sum.Sum(nil))
+	}
+
+	return ""
 }
 
 func (p *Service) get(ctx *gin.Context) {
