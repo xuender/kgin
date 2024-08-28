@@ -17,6 +17,7 @@ func Default() *gin.Engine {
 	}
 
 	engine := gin.New()
+	engine.ContextWithFallback = true
 	// 设置真实IP的header
 	// engine.TrustedPlatform = "Client-IP"
 	// 设置安全的代理
