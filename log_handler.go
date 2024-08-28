@@ -44,5 +44,14 @@ func LogHandler(ctx *gin.Context) {
 	}
 
 	record.Add(args...)
+
+	if obj, exists := ctx.Get("ctx"); exists {
+		if cont, ok := obj.(context.Context); ok {
+			_ = slog.Default().Handler().Handle(cont, record)
+		}
+
+		return
+	}
+
 	_ = slog.Default().Handler().Handle(context.Background(), record)
 }
