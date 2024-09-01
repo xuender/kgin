@@ -42,6 +42,10 @@ func LogHandler(ctx *gin.Context) {
 		args = append(args, "query", query)
 	}
 
+	if user, has := ctx.Get(gin.AuthUserKey); has {
+		args = append(args, gin.AuthUserKey, user)
+	}
+
 	record.Add(args...)
 
 	_ = slog.Default().Handler().Handle(ctx, record)
