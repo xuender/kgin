@@ -15,11 +15,6 @@ func LogHandler(ctx *gin.Context) {
 
 	ctx.Next()
 
-	query := ctx.Request.URL.RawQuery
-	if query != "" {
-		query = "?" + query
-	}
-
 	var pcs [1]uintptr
 
 	runtime.Callers(_calldepth, pcs[:])
@@ -38,8 +33,8 @@ func LogHandler(ctx *gin.Context) {
 		ctx.Request.URL.Path,
 	}
 
-	if query != "" {
-		args = append(args, "query", query)
+	if ctx.Request.URL.RawQuery != "" {
+		args = append(args, "query", ctx.Request.URL.RawQuery)
 	}
 
 	record.Add(args...)
