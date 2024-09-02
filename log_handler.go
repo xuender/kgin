@@ -21,16 +21,11 @@ func LogHandler(ctx *gin.Context) {
 
 	record := slog.NewRecord(time.Now(), slog.LevelInfo, "gin", pcs[0])
 	args := []any{
-		"status",
-		ctx.Writer.Status(),
-		"elapsed",
-		time.Since(start),
-		"ip",
-		ctx.ClientIP(),
-		"method",
-		ctx.Request.Method,
-		"path",
-		ctx.Request.URL.Path,
+		"status", ctx.Writer.Status(),
+		"elapsed", time.Since(start),
+		"ip", ctx.ClientIP(),
+		"method", ctx.Request.Method,
+		"path", ctx.Request.URL.Path,
 	}
 
 	if ctx.Request.URL.RawQuery != "" {
